@@ -20,7 +20,7 @@
 
 ## Problem Statement
 
-Food affordability in the Unites States has reached an all-time high in recent years, and is a struggle that many individuals and families are no stranger to. This is a critical issue for single mothers in particular, as it impacts their household's stability, health, and overall quality of life. In California especially, the average cost of living remains just barely achievable for many and women-headed households face unique economic challenges because of it. To be able to understand and predict the median income of women-headed households in California would allow for valuable insights into financial realities, and help identify common trends. 
+Food affordability in the Unites States has reached an all-time high in recent years, and is a struggle that many individuals and families are no stranger to. This is a critical issue for single mothers in particular, as it impacts their household's stability, health, and overall quality of life. In California especially, the average cost of living remains just barely achievable for many and women-headed households face unique economic challenges because of it. The ability to understand and predict the median income of women-headed households in California can provide valuable insights into financial realities, and help identify common trends. 
 
 ## Aim of this Report
 
@@ -33,8 +33,6 @@ This report aims to understand if food affordability and socioeconomic factors a
 3. Address how these insights can influence policy changes and improve economic outcomes in the future. 
 
 # Exploratory Data Analysis
-
-why do these statistics matter?
 
 To fully understand the important factors that may influence median income, we must first look at the raw data. This section gives an overview of the key variables by identifying relevant distributions and variations within the data. These summary statistics act as a foundation for deciding what potential predictors of median incme could be. 
 
@@ -85,7 +83,23 @@ With the variables defined above, the next step is to delve into the statistical
 
 *Table 2.2: Numeric Data Summary Satistics*
 
-In tables 2.1 and 2.2, the numeric features in this dataset are included. 
+Tables 2.1 and 2.2 act as a good baseline, but sometimes it can be easier to understand relationships with graphs. Below is a correlation matrix that visualizes the how strongly certain features are correlated with one another. 
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:75%; height:600px;">
+    <figcaption style="font-style: italic;">Figure 1: Correlation Matrix for Numeric Features</figcaption>
+</figure>
+
+It can be noted from the matrix, that there is a strong, almost perfect correlation between several variables. This is expected because many variables such as `UL96_affordability_ratio`, `LL95_affordability_ratio`, `se_food_afford`, `rse_food_afford`, `CA_RR_Affordability` and `affordability_per_person`are all calculated from information taken from `affordability_ratio`. Some more interesting strong correlations to take note of are between `cost_yr` and `ave_fam_size`, `med_income` and `food_afford_decile`. 
+
+There are also some important relationships between income and average family size, and racial/ethnic group as illustrated below in Figures 2 and 3. Figure 3 reveals a particularly interesting trend: while the spread of the points suggests that most women-headed households earn enough to afford food for their families, the red line superimposed on the graph highlights the unfortunate reality. The median annual income in this dataset is $33,103.00. This is significantly below the median annual household income in the United States which stood at [$80,610.00 as of 2022](https://www.census.gov/library/publications/2024/demo/p60-282.html). 
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/income_fam_size_plot.png" alt="Description" style="width:70%; height:500px;">
+    <figcaption style="font-style: italic;">Figure 2: Scatterplot of Income Against Family Size</figcaption>
+</figure>
+
+
 
 |  | `race_eth_name` | `geotype` | `geoname` | `county_name` |
 |--|-----------------|-----------|-----------|---------------|
