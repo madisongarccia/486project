@@ -5,12 +5,12 @@
 ---
 
 # Table of Contents
-1. [Introduction](#Introduction)
-2. [Exploratory Data Analysis](#EDA)
-3. [Methods](#methods)
-4. [Discussion on Model Selection](#modelselection)
-5. [Detailed Discussion on Best Model](#bestmodel)
-6. [Conclusion and Next Steps](#conclusion)
+1. Introduction
+2. Exploratory Data Analysis
+3. Methods
+4. Discussion on Model Selection
+5. Detailed Discussion on Best Model
+6. Conclusion and Next Steps
 
 ---
 
@@ -70,7 +70,7 @@ With the variables defined above, the next step is to delve into the statistical
 Tables 2.1 and 2.2 act as a good baseline, but sometimes it can be easier to understand relationships with graphs. Below is a correlation matrix that depicts the strength of correlations between features. 
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:65%; height:500px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:55%; height:450px;">
     <figcaption style="font-style: italic;">Figure 1: Correlation Matrix for Numeric Features</figcaption>
 </figure>
 
@@ -79,7 +79,7 @@ It can be noted from the matrix that there is a strong, almost perfect correlati
 While not overwhelmingly apparent in the correlation matrix, there is also an important relationship between `median_income` and `ave_fam_size` that Figure 2 below illustrates.
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/income_fam_size_plot.png" alt="Description" style="width:70%; height:500px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/income_fam_size_plot.png" alt="Description" style="width:55%; height:450px;">
     <figcaption style="font-style: italic;">Figure 2: Scatterplot of Income Against Family Size</figcaption>
 </figure>
 
@@ -130,7 +130,8 @@ The Food Cost Index is a measurement from the Consumer Price Index (CPI) used to
 Understanding if food is affordable is a useful binary indicator that is implemented by calculating if the `affordability_ratio` is above 1 (easily affordable). 
 
 **4. Affordability per Person**
-- `affordability_per_person` (numeric) Affordability ratio relative to family size
+
+`affordability_per_person`  represents the affordability ratio adjusted for family size, providing a per-person perspective on economic affordability.
 
 |          | `latitude` | `longitude` | `affordability_per_person` | `food_cost_index` 
 |-----------|---------|-----------|----------|-------------|
@@ -162,7 +163,8 @@ Referring back to Tables 2.1, 2.2, and 3, there are a handful of missing values 
 
 ## Supervised Learning Models
 
-Several supervised learning models were tested on this data to gain an understanding of what type of relationships could be captured by various methods. The table below includes high-level rsults from some regression, tree, ensemble, and deep learning models. 
+Several supervised learning models were tested on this data to test the relationships between features and the target variable. Each model was assessed based on the performance metric root mean squared error (rMSE), computational time, and challenges that occurred with the process. The table below includes the summary on these models and metrics. 
+
 
 | Model Name                     | Description                  | Hyperparameters | Root Mean Squared Error (rMSE) | Time | Challenges |
 |-----------|---------------------|---------|-------------------|----------------|---------|
@@ -185,6 +187,10 @@ As recorded in Table 5, the  Decision Tree and XGBoost models outperformed Ridge
 **2. Single Model Vs. Ensemble Method**
 
 While both the Decision Trees and XGBoost performed well, XGBoost's built-in regularization made it robust to overfitting, and more accurate. The DNN was flexible and handled the patterns in the data well, but it failed to outperform XGBoost, indicating that it may not be complex enough. While more layers and complexity could be added to this model, it is currently more computationally expensive than XGBoost, and adding more dimensions would only add to this time disparity. 
+
+**3. Computational Costs**
+
+K Nearest Neighbors (KNN) yieled a high computational cost because it relies heavily on time-consuming distance calculations for each prediction. XGBoost was slow, but offered a good trade-off between runtime and predictive power. 
 
 # Detailed Discussion on Best Model
 
@@ -263,7 +269,7 @@ The feature `affordability_per_person` is a substantially influential variable i
 
 To see the feature impacts on a specific prediction, the waterfall plot in figure 4 shows that `affordability_per_person` contributes -1.09 to  `median_income`, pushing the prediction lower than the baseline expected prediction of 10.47. `affordability_ratio` contributes -1.496, also pulling the prediction lower. Note that I had to take the log of price so in regular terms it is $35544.79 
 
-conclusion on SHAP and its connection to XGBoost model
+SHAP is a powerful tool used to interpret the XGBoost predictions by qunatifying the contributions of each feature to the model's output. Key global features that are particularly influential were identified by SHAP's global analysis, and local analyses from the waterfall plot provide insight into individual predictions. These interpretations allow models to be applied to real-world implications by ensuring that the predictions are easily explainable. 
 
 ## Anomaly Detection
 
@@ -271,25 +277,27 @@ The next step in understanding the data and chosen model is to find observations
 
 **I. Anomaly Detection on Income**
 
-By grouping different income levels into multiple (3) clusters, we can begin to understand general patterns in the feature. 
+To detect income anomalies, the dataset can be clustered into 3 groups based on log-transformed values of income. This clustering techniques helps with uncovering general patterns in the distribution of income, while outlining extreme cases to be aware of.
 
 <figure style="text-align: center;">
     <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/first_anomaly.png" alt="Description" style="width:55%; height:400px;">
     <figcaption style="font-style: italic;">Figure 5</figcaption>
 </figure>
 
-The anomalies in income represented in figure 5 are those in red, classified as being in the top 1% of data points. These points have the furthest distances from their cluster centroid, indicating these individuals likely have unusually high incomes. 
+In Figure 5, anomalies are highlighted in red. These were calculated by selecting the top 15 of income amounts farthest from their respective cluster centroids. Such large distances indicate these individuals likely have unusually high incomes, which sets them apart from the larger income distribution. 
 
 **II. Anomaly Detection on Income, Family Size, and Ethnic Group**
 
-Looking at both numeric and categorical features with anomaly dtection can give a more holistic view of the data. 
+Anomaly detection can also be expanded to tracking multiple features. In this case, looking at family size and ethnicity can uncover important income subgroups. 
 
 <figure style="text-align: center;">
     <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/anomaly_2.png" alt="Description" style="width:55%; height:400px;">
     <figcaption style="font-style: italic;">Figure 6</figcaption>
 </figure>
 
-The cluster groups are close together, but a relationship to ethnic group is clearly identifiable when the data points are colored by that. The anomalies in this figure are any that appear far from their cluster centroids, these could be high or low earners clustered in a prodominently low or high income group. With this method of cluster analysis, we can analyze subgroups. 
+In Figure 6, the cluster groupings are within close proximity of each other, but there is a clear visual difference from one ethnic group to the next. The anomalies in this figure are any individuals that appear far from their cluster centroids. examples of these could be high or low earners clustered in a prodominently low or high income group. 
+
+There are many iterations of this type of subgroup clustering that would provide valuable insights regarding various factors. Providing this type of analysis can be used to inform certain political interventions to help subgroups that would benefit from government action. 
 
 ## Dimension Reduction
 
