@@ -40,4 +40,21 @@ This project explores income inequality among women-headed households in Califor
 
     PCA revealed that most of the dataset's variance could be explained with a reduced set of components, aiding in model simplification and visualization.
 
+## Navigating this Repo
+
+├── code/                        # Python scripts for data processing, modeling, and analysis
+│   ├── EDA.ipynb                # Code for exploratory data analysis
+│   ├── working_income.ipynb     # feature engineering, model selection
+│   ├── selected_model.ipynb     # XGBoost, SHAP, Cluster analysis, dimension reduction 
+├── plots/                       # Saved visualizations (e.g., SHAP, PCA, UMAP)
+├── reports/                     # Reports from entire project process
+|   |── final_report.md          # Full report in Markdown format
+|   |──final_report.pdf          # Full report pdf
+|   |── Midway Report.docx              
+|   |──Project Proposal.docx 
+└── README.md                    # Project overview (this file)
+
+
+Dataset not included for privacy purposes but can be found here: 
+
 Link to data source: https://catalog.data.gov/dataset/food-affordability-fc448
