@@ -24,20 +24,20 @@ This project explores income inequality among women-headed households in Califor
 
 1. XGBoost as the Best Model:
 
-        XGBoost outperformed other models, achieving the lowest rMSE score and demonstrating strong generalization capabilities.
-        Hyperparameter tuning improved performance further.
+    XGBoost outperformed other models, achieving the lowest rMSE score and demonstrating strong generalization capabilities.
+    Hyperparameter tuning improved performance further.
 
 2. Feature Interpretability with SHAP:
 
-        Key features influencing income include affordability_per_person and affordability_ratio.
-        SHAP visualizations provided insights into individual predictions and global feature importance.
+    Key features influencing income include affordability_per_person and affordability_ratio.
+    SHAP visualizations provided insights into individual predictions and global feature importance.
 
 3. Anomaly Detection:
 
-        Identified income outliers and subgroups with unique income patterns, offering actionable insights into economic disparities.
+    Identified income outliers and subgroups with unique income patterns, offering actionable insights into economic disparities.
 
 4. Dimension Reduction:
 
-        PCA revealed that most of the dataset's variance could be explained with a reduced set of components, aiding in model simplification and visualization.
+    PCA revealed that most of the dataset's variance could be explained with a reduced set of components, aiding in model simplification and visualization.
 
 Link to data source: https://catalog.data.gov/dataset/food-affordability-fc448
