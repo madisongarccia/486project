@@ -230,7 +230,7 @@ This tuning process was effective in ensuring that the model was fit properly, a
 
 Shapley Additive Explanation (SHAP) values are a strong tool that can help interpret the information generated from the XGBoost Regressor's predictions. They act as a general framework that can be appplied to models, and explain their outputs by uniformly quantifying feature contributions. 
 
-**Model Performance Evaluation**
+**I. Model Performance Evaluation**
 
 One thing SHAP can be used for is to see how predicted values compare to actual values to evaluate model performance. From these comparisons, we can gather examples of true positives/negatives and false positives/negatives from the model's output. 
 
@@ -242,14 +242,58 @@ A predicted log income value of 10.5464 compared to the actual value of 10.54639
 
 A predicted log income value of 10.914 compared to the actual value of 10.9404 has an error of 0.026469 which is significant at the chosen 0.00001 level. Since the model incorrectly classified this observation higher than the actual income, this is a False Positive overprediction. An opposite instance with negative error would represent a false negative underprediction. 
 
-**Feature Contributions**
+**II. Feature Contributions**
 
 To continue interpreting the XGBoost model predictions, SHAP can be used to quanitfy and visualize feature contributions. This can be done on a global scale, identifying the most influential features across the dataset, and locally to visualize individual predictions. 
 
+A SHAP summary plot helps to identify features by ranking them based on their average absolute SHAP values. 
 
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/SHAP_summary.png" alt="Description" style="width:70%; height:500px;">
+    <figcaption style="font-style: italic;">Figure 3: SHAP Global Feature Contributions</figcaption>
+</figure>
+
+The feature `affordability_per_person` is a substantially influential variable in the model as it reduces `median_income` when `affordability_per_person` is high. This suggests that higher food affordability is associated with lower income predictions. This counterintuitive relationship may seem incorrect or opposite of what we would expect, however figure 2 serves as a reminder that there is likely an external factors influencing affordability versus income. One possible explanation could be that those with lower incomes and larger families tend to shop for cheaper food options. 
+
+To see the feature impacts on a specific prediction, the waterfall plot below ...
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/single_SHAP.png" alt="Description" style="width:70%; height:500px;">
+    <figcaption style="font-style: italic;">Figure 4: SHAP Local Feature Contributions</figcaption>
+</figure>
+
+In the figure above, `affordability_per_person` contributes -1.09 to  `median_income`, pushing the prediction lower than the baseline expected prediction of 10.47. `affordability_ratio` contributes -1.496, also pulling the prediction lower. Note that I had to take the log of price so in regular terms it is $35544.79 
+
+conclusion on SHAP and its connection to XGBoost model
 
 ## Anomaly Detection
 
+The next step in understanding the data and chosen model is to find observations or patterns that deviate significantly from the norm. This may include underpredictions, overpredictions, or unexpected feature combinations. 
+
+**I. Anomaly Detection on Income**
+
+By grouping different income levels into multiple (3) clusters, we can begin to understand general patterns in the feature. 
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/first_anomaly.png" alt="Description" style="width:70%; height:500px;">
+    <figcaption style="font-style: italic;">Figure 5</figcaption>
+</figure>
+
+The anomalies in income represented in figure 5 are those in red, classified as being in the top 1% of data points. These points have the furthest distances from their cluster centroid, indicating these individuals likely have unusually high incomes. 
+
+**II. Anomaly Detection on Income, Family Size, and Ethnic Group**
+
+Looking at both numeric and categorical features with anomaly dtection can give a more holistic view of the data. 
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/anomaly_2.png" alt="Description" style="width:70%; height:500px;">
+    <figcaption style="font-style: italic;">Figure 6</figcaption>
+</figure>
+
+The cluster groups are close together, but a relationship to ethnic group is clearly identifiable when the data points are colored by that. The anomalies in this figure are any that appear far from their cluster centroids, these could be high or low earners clustered in a prodominently low or high income group. With this method of cluster analysis, we can analyze subgroups. 
+
 ## Dimension Reduction
+
+
 
 # Conclusion and Next Steps
