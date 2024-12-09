@@ -20,7 +20,7 @@
 
 ## Problem Statement
 
-Food affordability in the Unites States has reached an all-time high in recent years, and is a struggle that many individuals and families are no stranger to. This is a critical issue for single mothers in particular, as it impacts their household's stability, health, and overall quality of life. In California especially, the average cost of living remains just barely achievable for many and women-headed households face unique economic challenges because of it. The ability to understand and predict the median income of women-headed households in California can provide valuable insights into financial realities, and help identify common trends. 
+Food affordability in the Unites States has reached an all-time high in recent years, and is a struggle that many individuals and families are no stranger to. This is a critical issue for single mothers especially, as it impacts their household's stability, health, and overall quality of life. In California, the average cost of living remains just barely achievable for many and women-headed households face unique economic challenges because of it. The ability to understand and predict the median income of women-headed households in California can provide valuable insights into financial realities, and help identify common trends. 
 
 ## Aim of this Report
 
@@ -34,17 +34,17 @@ This report aims to understand if food affordability and socioeconomic factors a
 
 # Exploratory Data Analysis
 
-To fully understand the important factors that may influence median income, we must first look at the raw data. This section gives an overview of the key variables by identifying relevant distributions and variations within the data. These summary statistics act as a foundation for deciding what potential predictors of median incme could be. 
+To fully understand the important factors that may influence median income, we must first look at the raw data. This section gives an overview of the key variables by identifying relevant distributions and variations within the data. These summary statistics act as a foundation for deciding what the potential predictors of median incme could be. 
 
 The dataset includes the following features:
 
+- `median_income` (numeric - target variable) Median household income   
 -  `race_eth_name` (string) Name of race/ethnic group
 - `geotype` (string) Type of geographic unit place (PL), county (CO), region (RE), state (CA)       
 - `geoname` (string) Name of geographic unit  
 - `county_name` (string) Name of county the geotype is in       
 - `region_code` (string) Metropolitan Planning Organization (MPO)- based region code     
-- `cost_yr` (numeric) Annual food costs 
-- `median_income` (numeric) Median household income      
+- `cost_yr` (numeric) Annual food costs    
 - `affordability_ratio` (numeric) Ratio of food cost to household income         
 - `LL95_affordability_ratio` (numeric) Lower limit of affordability 95% confidence interval          
 - `UL95_affordability_ratio` (numeric) Upper limit of affordability confidence interval       
@@ -65,12 +65,12 @@ With the variables defined above, the next step is to delve into the statistical
 | Q4 | 14 | 8325.618 | 46418 | 0.349 | 0.174 | 0.561| 53.824 | 8 | 1.312 | 3.61 |
 | maximum | 14 | 16872.05 | 250000 | 4.852 | 0.851 | 108.784 | 5227.124 | 10 | 18.214 | 7.2 | 
 
-*Table 2: Numeric Data Summary Satistics*
+*Table 2: Numeric Data Summary Satistics - rounded for readability*
 
 Tables 2.1 and 2.2 act as a good baseline, but sometimes it can be easier to understand relationships with graphs. Below is a correlation matrix that depicts the strength of correlations between features. 
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:75%; height:600px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:65%; height:500px;">
     <figcaption style="font-style: italic;">Figure 1: Correlation Matrix for Numeric Features</figcaption>
 </figure>
 
@@ -95,6 +95,7 @@ Although a majority of the data in this report is numeric, there are some catego
 |   frequency     | 32819 | 298431 | 990 | 123966 | 
 
 *Table 3: Categorical Data Summary Satistics*
+
 
 ## EDA Key Findings 
 
@@ -159,10 +160,9 @@ Similarly to the categorical features, numeric features also need some preproces
 Referring back to Tables 2.1, 2.2, and 3, there are a handful of missing values that need to be handled before running any models. Using Scikit-Learn's `SimpleImputer` package, the missing numeric values can be filled with the average value of the given feature, and the most frequent value can be filled in categorical features. 
 
 
-
-include dimension reduction features
-
 ## Supervised Learning Models
+
+Several supervised learning models were tested on this data to gain an understanding of what type of relationships could be captured by various methods. The table below includes high-level rsults from some regression, tree, ensemble, and deep learning models. 
 
 | Model Name                     | Description                  | Hyperparameters | Root Mean Squared Error (rMSE) | Time | Challenges |
 |-----------|---------------------|---------|-------------------|----------------|---------|
@@ -192,7 +192,7 @@ After weighing all of the benefits and disadvantages of each of the models explo
 
 ## XGBoost Hyperparameter Tuning
 
-To build the most optimized version of the XGBoost Regressor, hyperparameter tuning was conducted using the grid search approach. The goal of this method was to provide many possible combinations of hyperparameters and identify the ones that minimize the model's prediction error on the training data, while also balancing the model's ability to generalize to unseen data. The follow hyperparameters were tested: 
+To build the most optimized version of the XGBoost Regressor, hyperparameter tuning was conducted using the grid search approach. The goal of this method was to provide many possible combinations of hyperparameters and identify the ones that minimize the model's prediction error on the training data, while also balancing the model's ability to generalize to unseen data. The following hyperparameters were tested: 
 
 - `n_estimators`: Controls the number of trees in the model
 
@@ -202,7 +202,7 @@ To build the most optimized version of the XGBoost Regressor, hyperparameter tun
 
 - `subsample`: Fraction of observations randomly sampled for each tree
 
-With these hyperparameter options, `GridSearchCV` tested all combinations, evaluated using 5-fold cross validation, which splits the data into 4 training subsets and one validation. 
+With these hyperparameter options, `GridSearchCV` tested all combinations and evaluated them using 5-fold cross validation, which splits the data into 4 training subsets and one validation. 
 
 ```
 param_grid = {
@@ -248,21 +248,20 @@ To continue interpreting the XGBoost model predictions, SHAP can be used to quan
 
 A SHAP summary plot helps to identify features by ranking them based on their average absolute SHAP values. 
 
-<figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/SHAP_summary.png" alt="Description" style="width:70%; height:500px;">
-    <figcaption style="font-style: italic;">Figure 3: SHAP Global Feature Contributions</figcaption>
-</figure>
+<div style="display: flex; justify-content: space-around; text-align: center;">
+    <figure>
+        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/SHAP_summary.png" alt="Image 1" width="500"/>
+        <figcaption  style="font-style: italic;">Figure 3: SHAP Global Feature Contributions</figcaption>
+    </figure>
+    <figure>
+        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/single_SHAP.png" alt="Image 2" width="500"/>
+        <figcaption  style="font-style: italic;">Figure 4: SHAP Local Feature Contributions</figcaption>
+    </figure>
+</div>
 
 The feature `affordability_per_person` is a substantially influential variable in the model as it reduces `median_income` when `affordability_per_person` is high. This suggests that higher food affordability is associated with lower income predictions. This counterintuitive relationship may seem incorrect or opposite of what we would expect, however figure 2 serves as a reminder that there is likely an external factors influencing affordability versus income. One possible explanation could be that those with lower incomes and larger families tend to shop for cheaper food options. 
 
-To see the feature impacts on a specific prediction, the waterfall plot below ...
-
-<figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/single_SHAP.png" alt="Description" style="width:70%; height:500px;">
-    <figcaption style="font-style: italic;">Figure 4: SHAP Local Feature Contributions</figcaption>
-</figure>
-
-In the figure above, `affordability_per_person` contributes -1.09 to  `median_income`, pushing the prediction lower than the baseline expected prediction of 10.47. `affordability_ratio` contributes -1.496, also pulling the prediction lower. Note that I had to take the log of price so in regular terms it is $35544.79 
+To see the feature impacts on a specific prediction, the waterfall plot in figure 4 shows that `affordability_per_person` contributes -1.09 to  `median_income`, pushing the prediction lower than the baseline expected prediction of 10.47. `affordability_ratio` contributes -1.496, also pulling the prediction lower. Note that I had to take the log of price so in regular terms it is $35544.79 
 
 conclusion on SHAP and its connection to XGBoost model
 
@@ -275,7 +274,7 @@ The next step in understanding the data and chosen model is to find observations
 By grouping different income levels into multiple (3) clusters, we can begin to understand general patterns in the feature. 
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/first_anomaly.png" alt="Description" style="width:70%; height:500px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/first_anomaly.png" alt="Description" style="width:55%; height:400px;">
     <figcaption style="font-style: italic;">Figure 5</figcaption>
 </figure>
 
@@ -286,7 +285,7 @@ The anomalies in income represented in figure 5 are those in red, classified as 
 Looking at both numeric and categorical features with anomaly dtection can give a more holistic view of the data. 
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/anomaly_2.png" alt="Description" style="width:70%; height:500px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/anomaly_2.png" alt="Description" style="width:55%; height:400px;">
     <figcaption style="font-style: italic;">Figure 6</figcaption>
 </figure>
 
@@ -294,6 +293,48 @@ The cluster groups are close together, but a relationship to ethnic group is cle
 
 ## Dimension Reduction
 
+The topic used to understand this dataset is dimension reduction. This step is included to simplify the complexity of the data, making it easier to analyze. Since some of the features in this dataset were One-Hot Encoded, it has high dimensionality from the numerous binary features. This section will focus on applying Principle COmponent ANalysis (PCA) and UMAP to transform the data.
 
+**I. PCA**
+
+The first step is to fit `PCA` to the training predictors. SInce the goal is to find a linear transformation of the original data that mximizes the variance of the data, the graph below helps to visualize what this process looks like for our case. 
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/pca_variance.png" alt="Description" style="width:55%; height:400px;">
+    <figcaption style="font-style: italic;">Figure 7: PCA Maximize Variance Plot</figcaption>
+</figure>
+
+From this, we know that to retain 95% of the variance, we need 86 components. The next step is to find the hyperplane that preserves the largest amount of the variance, and project the data onto that hyperplane. 
+
+```
+pca = PCA(n_components=2) # on train to avoid data leakage
+## pca analyzes structure of training data and finds principle components (linear combinations of original features that maximize variance)
+X_train_pc = pca.fit_transform(X_train_processed.toarray()) # project training data into lower-dimension
+X_test_pc = pca.transform(X_test_processed) 
+```
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/pca_plot.png" alt="Description" style="width:55%; height:400px;">
+    <figcaption style="font-style: italic;">Figure 8: PCA Labels</figcaption>
+</figure>
+
+
+The new `X_train_pc` and `X_test_pc` could be used in the XGBoost model for improved performance. Fitting the optimized model to these new training and testing sets yieled a rMSE of 0.0202 which is lower than the original model's result (0.0063). This could be due to the fact that the dimenion reduction values are not complex enough to explain the behavior in the data well. 
+
+**II. UMAP**
+
+UMAP is an example of a manifold learning method to see how a non-linear dimension reduction algorithm would perform on this data. There are multiple manifold learning options, but UMAP is generally faster than tSNE, another popular choice, and balances global versus local relationships better than tSNE as well. 
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/umap_plot.png" alt="Description" style="width:55%; height:400px;">
+    <figcaption style="font-style: italic;">Figure 9: UMAP Labels</figcaption>
+</figure>
+
+Since UMAP is being used for visualization purposes in this report, a 2D representation of the dat is not extremely informative or useful. Due to this, PCA is likely a better visual aid for this data as patterns are decipherable. 
 
 # Conclusion and Next Steps
+
+This report used machine learning techniques to analyze and predict the nature of income among women-headed households in California based on affordability and demographic information. After contrasting multiple different kinds of models, XGBoost proved to be the most effective as it captured the complexity of the data and provided reliable predictions for income. An analysis of feature importance with SHAP reinforced the strong impact of affordability and family size on income, as well as certain locations in California. Anomaly detection helped highlight outliers and unique cases of individuals who are higher earners than the majority of the women sampled. 
+
+In the future, there could be stronger ingetration of geographic information that could be used for a more thorough spatial analysis of income. It may also be useful to test additional ensemble approaches, and refine the anomaly detection process to find more interesting patterns and subgroup interactions. 
+
+
