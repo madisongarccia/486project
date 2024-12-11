@@ -64,7 +64,7 @@ With the variables defined above, the next step is to delve into the statistical
 *Table 2: Numeric Data Summary Satistics - rounded for readability*
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:70%; height:450px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/correlation_matrix.png" alt="Correlation Matrix" style="width:70%; height:350px;">
     <figcaption style="font-style: italic;">Figure 1: Correlation Matrix for Numeric Features</figcaption>
 </figure>
 
@@ -73,7 +73,7 @@ It can be noted from Figure 1 that there is a strong, almost perfect correlation
 While not overwhelmingly apparent in the correlation matrix, there is also an important relationship between `median_income` and `ave_fam_size` that Figure 2 below illustrates.
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/income_fam_size_plot.png" alt="Description" style="width:70%; height:400px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/income_fam_size_plot.png" alt="Description" style="width:70%; height:350px;">
     <figcaption style="font-style: italic;">Figure 2: Scatterplot of Income Against Family Size</figcaption>
 </figure>
 
@@ -158,7 +158,7 @@ Similarly to the categorical features, numeric features also need some preproces
 
 **6. Handling Missing Values**
 
-Referring back to Tables 2.1, 2.2, and 3, there are a handful of missing values that need to be handled before running any models. Using Scikit-Learn's `SimpleImputer` package, the missing numeric values can be filled with the average value of the given feature, and the most frequent value can be filled in categorical features. 
+Referring back to Tables 2, 3 and 4, there are a handful of missing values that need to be handled before running any models. Using Scikit-Learn's `SimpleImputer` package, the missing numeric values can be filled with the average value of the given feature, and the most frequent value can be filled in categorical features. 
 
 ## Supervised Learning Models
 
@@ -170,7 +170,7 @@ Several supervised learning models were tested on this data to test the relation
 | K Nearest Neighbors Regressor |  Predicting target by finding the average of the *k* number of neighbors surrounding a data point. | `n_neighbors`: 5  `weights`: 'distance' | 0.0321   | 12m  | Computationally expensive |
 | Ridge Regression | A linear regression model that uses Ridge regularization - a penalty term added to the cost function that pushes all coefficients towards zero. | `alpha`: 10 |  0.2015 | 26.1s   | Poor rMSE score compared to other models | 
 | Decision Trees | Starting from the root node, branches move down with nodes split based on different patterns in the most important features until we reach the terminal node (leaves). | `max_depth`: 7 `min_samples_leaf`: 1 `min_samples_split`: 10 | 0.0158 |   2m32s   | Prone to overfitting | 
-| XGBoost | Combines weak learning trees into strong learners by combining residuals and pruning. |    `learning_rate`: 0.2 `max_depth`: 7 `n_estimators`: 100 `subsample`: 1.0 |   0.0153     |  2m20s    | Best available model   | 
+| XGBoost | Combines weak learning trees into strong learners by combining residuals and pruning. |    `learning_rate`: 0.2 `max_depth`: 3 `n_estimators`: 100 `subsample`: 0.8 |   0.0413     |  26.9s    | Best available model   | 
 | Deep Neural Network | Using Tensorflow, a DNN is an artificial neural network that includes multiple layers that can look for different patterns in the data.       |  `epochs`: 20 `batch_size`: 32 `validation_split`: 0.2   |  0.0628     | 1m57s    | Not a very strong model for this data | 
 
 *Table 5: Supervised Learning Models*
@@ -219,11 +219,11 @@ One thing SHAP can be used for is to see how predicted values compare to actual 
 
 1. True Positives/Negatives (TP/TN):
 
-    A predicted affordability ratio of 0.3246 for an individual compared to the actual ratio of 0.3247 has an error of essentially zero (1.034459e-04) which is insignificant at the chosen 0.01 level, thus suggesting that the model is accurate in this instance. 
+    A predicted affordability ratio of  0.35778 for an individual compared to the actual ratio of 0.3580 has an error of close to zero (0.0003) which is insignificant at the chosen 0.01 level, thus suggesting that the model is accurate in this instance. 
 
 2. False Positives/Negatives (FP/FN):
 
-    A predicted affordability ratio of 1.3403 compared to the actual value of 1.4491 has an error of ~0.11 which is significant at the chosen 0.01 level. Since the model incorrectly classified this individual higher than their actual affordability ratio, this is a **False Positive** overprediction. An opposite instance with negative error would represent a **False Negative** underprediction. 
+    A predicted affordability ratio of 0.4980 compared to the actual value of 0.5084 has an error of ~0.104 which is significant at the chosen 0.01 level. Since the model incorrectly classified this individual higher than their actual affordability ratio, this is a **False Positive** overprediction. An opposite instance with negative error would represent a **False Negative** underprediction. 
 
 **II. Feature Contributions**
 
@@ -233,7 +233,7 @@ A SHAP summary plot helps to identify features by ranking them based on their av
 
 <div style="display: flex; justify-content: space-around; text-align: center;">
     <figure>
-        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/SHAP_summary.png" alt="Image 1" width="800"/>
+        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/SHAP_summary.png" alt="Image 1" width="800" height = "250"/>
         <figcaption  style="font-style: italic;">Figure 4: SHAP Global Feature Contributions</figcaption>
     </figure>
     <figure>
@@ -242,14 +242,14 @@ A SHAP summary plot helps to identify features by ranking them based on their av
     </figure>
 </div>
 
-As seen in Figure 5, the feature `median_income` is a substantially influential variable in the model. When `median_income` is high, overall predictions for `affordability_ratio` decrease slightly, and when `median_income` is low, `affordability_ratio` increases substantially. Similar relationships can be interpreted for the other features on the SHAP global feature contributions plot. 
+As seen in Figure 4, the feature `median_income` is a substantially influential variable in the model. When `median_income` is high, overall predictions for `affordability_ratio` decrease slightly, and when `median_income` is low, `affordability_ratio` increases substantially. Similar relationships can be interpreted for the other features on the SHAP global feature contributions plot. 
 
 
-To see the feature impacts on a specific prediction, the waterfall plot in Figure 5 shows that `median_income` contributes +0.66 to  `affordability_ratio`, pushing the prediction higher than the baseline expected prediction of 0.325. `geoname_San Joaquin Valley` contributes +0.1, also pulling the prediction for affordability up. These features in combination with the others captured in Figure 5 contribute to pushing the final prediction for this particular individual to a predicted affordability ratio of 0.964.
+To see the feature impacts on a specific prediction, the waterfall plot in Figure 5 shows that `median_income` contributes -0.22 to  `affordability_ratio`, pushing the prediction lower than the baseline expected prediction of 0.357. `geoname_Plainview CDP` contributes +0.05, also pulling the prediction for affordability up. These features in combination with the others captured in Figure 5 contribute to pushing the final prediction for this particular individual to a predicted affordability ratio of 0.261.
 
 SHAP is a powerful tool used to interpret the XGBoost predictions by qunatifying the contributions of each feature to the model's output. Key global features that are particularly influential were identified by SHAP's global analysis, and local analyses from the waterfall plot provide insight into individual predictions. These interpretations allow models to be applied to real-world implications by ensuring that the predictions are easily explainable. 
 
-## Anomaly Detection
+## Anomaly Detection & Cluster Analysis
 
 The next step in understanding the data and chosen model is to find observations or patterns that deviate significantly from the norm. This may include underpredictions, overpredictions, or unexpected feature combinations. 
 
@@ -264,22 +264,20 @@ To detect affordability anomalies, the dataset can be clustered into 3 groups ba
 
 In Figure 6, anomalies are highlighted in red. These were calculated by selecting the top 1% of affordability ratios farthest from their respective cluster centroids. Such large distances indicate these individuals likely have unusually high ratios given the surrounding averages.
 
-**II. Anomaly Detection on Affordability, Family Size, and Ethnic Group**
+**II. Cluster Analysis on Affordability, Family Size, and Ethnic Group**
 
-Anomaly detection can also be expanded to tracking multiple features. In this case, looking at family size and ethnicity can uncover important affordability subgroups. 
+Analyzing clusters can be expanded to tracking multiple features. In this case, looking at family size and ethnicity can uncover important affordability subgroups. 
 
 <figure style="text-align: center;">
     <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/anomaly_2.png" alt="Description" style="width:70%; height:350px;">
     <figcaption style="font-style: italic;">Figure 6</figcaption>
 </figure>
 
-In Figure 6, the cluster groupings are within close proximity of each other, but there is a clear visual difference from one ethnic group to the next. The anomalies in this figure are any individuals that appear far from their cluster centroids. examples of these could be high or low earners clustered in a prodominently low or high affordability or family size group. 
-
-There are many iterations of this type of subgroup clustering that would provide valuable insights regarding various factors. Providing this type of analysis can be used to inform certain political interventions to help subgroups that would benefit from government action. 
+In Figure 6, the cluster groupings are within close proximity of each other, but there is a clear visual difference from one ethnic group to the next. There are many iterations of this type of subgroup clustering that would provide valuable insights regarding various factors. Providing this type of analysis can be used to inform certain political interventions to help subgroups that would benefit from government action. 
 
 ## Dimension Reduction
 
-The topic used to understand this dataset is dimension reduction. This step is included to simplify the complexity of the data, making it easier to analyze. Since some of the features in this dataset were One-Hot Encoded, it has high dimensionality from the numerous binary features. This section will focus on applying Principle COmponent ANalysis (PCA) and UMAP to transform the data.
+The topic used to understand this dataset is dimension reduction. This step is included to simplify the complexity of the data, making it easier to analyze. Since some of the features in this dataset were One-Hot Encoded, it has high dimensionality from the numerous binary features. This section will focus on applying Principle COmponent Analysis (PCA) and UMAP to transform the data.
 
 **I. PCA**
 
@@ -290,7 +288,7 @@ The first step is to fit `PCA` to the training predictors. SInce the goal is to 
     <figcaption style="font-style: italic;">Figure 8: PCA Maximize Variance Plot</figcaption>
 </figure>
 
-From this, we know that to retain 95% of the variance, we need 138 components. The next step is to find the hyperplane that preserves the largest amount of the variance, and project the data onto that hyperplane. 
+From this, we know that to retain 95% of the variance, we need 203 components. The next step is to find the hyperplane that preserves the largest amount of the variance, and project the data onto that hyperplane. Figure 8 shows that PCA does capture some of the distrinctions between different affordability groupings, but is not ideal. 
 
 <figure style="text-align: center;">
     <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/pca_plot.png" alt="Description" style="width:70%; height:350px;">
@@ -298,7 +296,7 @@ From this, we know that to retain 95% of the variance, we need 138 components. T
 </figure>
 
 
-The new `X_train_pc` and `X_test_pc` could be used in the XGBoost model for improved performance. Fitting the optimized model to these new training and testing sets yieled a rMSE of 0.0202 which is higher than the original model's result (0.0153). This could be due to the fact that the dimenion reduction values are not complex enough to explain the behavior in the data well.
+The new `X_train_pc` and `X_test_pc` could be used in the XGBoost model for improved performance. Fitting the optimized model to these new training and testing sets yieled a rMSE of 0.0776 which is higher than the original model's result (0.0153). This could be due to the fact that the dimenion reduction values are not complex enough to explain the behavior in the data well.
 
 **II. UMAP**
 
@@ -315,6 +313,8 @@ Since UMAP is being used for visualization purposes in this report, a 2D represe
 
 This report used machine learning techniques to analyze and predict the nature of affordality ratios among women-headed households in California based on income and additional demographic information. After contrasting multiple different kinds of models, XGBoost proved to be the most effective as it captured the complexity of the data and provided reliable predictions. An analysis of feature importance with SHAP reinforced the strong impact of income and geographic location on affordability. Anomaly detection helped highlight outliers and unique cases of individuals who are likely higher earners or spend less on food than the majority of the women sampled. 
 
-In the future, there could be stronger integration of geographic information that could be used for a more thorough spatial analysis of affordability considering it was such an influential predictor. It may also be useful to test additional ensemble approaches, and refine the anomaly detection process to find more interesting patterns and subgroup interactions. 
+In the future, there could be stronger integration of geographic information such as detailed neighborhood or zip code-level data, to facilitate more thorough spatial analyses of affordability. This would enable the identification of hyper-local patterns and provide actionable insights for place-based interventions. It may also be useful to test additional ensemble approaches, refine the anomaly detection process to uncover subgroup-specific challenges, and analyze interactions between demographic factors and affordability.
 
-include some suggestions
+## Practical Implications
+
+To support policymakers and government officials in California, this analysis underscores the need to address regional disparities in affordability, which can be directly tied to geographic location, income, and high grocery prices. Policymakers could use insights from this study to identify high-need areas and allocate resources accordingly. For example, targeted subsidies or food assistance programs could be expanded to regions with the highest affordability challenges, as identified by this analysis. Additionally, addressing systemic barriers to economic mobility, such as access to affordable housing and higher-paying job opportunities in underperforming regions, should be a priority.
