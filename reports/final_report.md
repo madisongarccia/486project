@@ -20,70 +20,65 @@
 
 ## Problem Statement
 
-Food affordability in the Unites States has reached an all-time high in recent years, and is a struggle that many individuals and families are no stranger to. This is a critical issue for single mothers especially, as it impacts their household's stability, health, and overall quality of life. In California, the average cost of living remains just barely achievable for many and women-headed households face unique economic challenges because of it. The ability to understand and predict the median income of women-headed households in California can provide valuable insights into financial realities, and help identify common trends. 
+Food affordability in the Unites States has reached an all-time low in recent years, and is a struggle that many individuals and families are no stranger to. This is a critical issue for single mothers especially, as it impacts their household's stability, health, and overall quality of life. In California, the average cost of living remains just barely achievable for many, and women-headed households face unique economic challenges because of it. An analysis of the food affordability for single-mother families in California can serve as a starting point for economic understanding, and opportunities for political intervention.
 
 ## Aim of this Report
 
-This report aims to understand if food affordability and socioeconomic factors are accurate tools in predicting the median income of women-headed households in California. By looking at data that includes information on food costs, regional demographics and economic indicators, this analysis seeks to accomplish the following:
+This report aims to understand if food affordability for single mothers in California can be accurately explained and predicted by socioeconomic and demographic factors. By looking at data that includes information on food costs, annual income, regional demographics and economic indicators, this analysis seeks to accomplish the following:
 
-1. Understand the relationship between income and food affordability.
+1. Understand the relationship between income, location, ethnic group and food affordability.
 
-2. Develop predictive machine learning models on median income.
+2. Develop predictive machine learning models on food affordability to income ratios.
 
 3. Address how these insights can influence policy changes and improve economic outcomes in the future. 
 
 # Exploratory Data Analysis
 
-To fully understand the important factors that may influence median income, we must first look at the raw data. This section gives an overview of the key variables by identifying relevant distributions and variations within the data. These summary statistics act as a foundation for deciding what the potential predictors of median incme could be. 
+To fully understand the important factors that may influence affordability, we must first look at the raw data. This section gives an overview of the key variables by identifying relevant distributions and variations within the data. These summary statistics act as a foundation for deciding what the potential predictors of affordability could be. 
 
 The dataset includes the following features:
 
-- `median_income` (numeric - target variable) Median household income   
+- `affordability_ratio` (numeric - target variable) Ratio of food cost to household income         
+- `median_income` (numeric) Median household income   
 -  `race_eth_name` (string) Name of race/ethnic group
 - `geotype` (string) Type of geographic unit place (PL), county (CO), region (RE), state (CA)       
 - `geoname` (string) Name of geographic unit  
 - `county_name` (string) Name of county the geotype is in       
 - `region_code` (string) Metropolitan Planning Organization (MPO)- based region code     
 - `cost_yr` (numeric) Annual food costs    
-- `affordability_ratio` (numeric) Ratio of food cost to household income         
-- `LL95_affordability_ratio` (numeric) Lower limit of affordability 95% confidence interval          
-- `UL95_affordability_ratio` (numeric) Upper limit of affordability confidence interval       
-- `rse_food_afford` (numeric) Relative standard error of affordability ratio 
-- `CA_RR_Affordability` (numeric) Ratio of affordability rate to California affordability rate  
 - `ave_fam_size` (numeric) Average family size - combined by race              
 
 With the variables defined above, the next step is to delve into the statistical properties of each, which includes their underlying distributions and variations. It is important to be aware of any potential outliers or missing data before selecting predictive features for future models. 
 
-|          | `reg_code` | `cost` | `income` | `afford_rat` | `LL95` | `UL95`  | `rse_afford` | `afford_decile` |  `CA_RR_Afford` | `ave_fam_size` | 
-|-----------|---------|-----------|----------|-------------|-------|---------|-----------|------------|-------------|----|-------|
-| count | 295362 | 264366 | 101836 | 101836 | 99445 | 99445  |99445 |  26715 |101836 | 280593 | 
-| mean | 11.388 | 7602.632 | 38038.998 | 0.325 | 0.113 | 0.769  | 53.362 | 5.804 | 1.219 | 3.294 |
-| standard deviation | 3.341 | 1435.062 | 27050.591 | 0.42 | 0.116 | 3.599  | 174.806 | 2.685 | 1.578 | 0.636 | 
-| minimum | 1 | 3095.425 | 2500 | 0.021 | 0 | 0.041  | 0.684 | 1 |  0.08 | 1.36 |
-| Q2 | 9 | 6667.128 | 22417 | 0.153 | 0 | 0.229 | 12.574 | 4 | 0.576 | 2.88 | 
-| median | 14 | 7460.84 | 33103 | 0.227 | 0.092 | 0.351 | 25.596 | 6 | 0.852 | 3.25 |
-| Q4 | 14 | 8325.618 | 46418 | 0.349 | 0.174 | 0.561| 53.824 | 8 | 1.312 | 3.61 |
-| maximum | 14 | 16872.05 | 250000 | 4.852 | 0.851 | 108.784 | 5227.124 | 10 | 18.214 | 7.2 | 
+|          | `region_code` | `cost_yr` | `median_income` | `affordability_ratio`  | `ave_fam_size` | 
+|-----------|---------|-----------|----------|-------------|-------|
+| count | 295362 | 264366 | 101836 | 101836 |  280593 | 
+| mean | 11.388 | 7602.632 | 38038.998 | 0.325 | 3.294 |
+| standard deviation | 3.341 | 1435.062 | 27050.591 | 0.42 | 0.636 | 
+| minimum | 1 | 3095.425 | 2500 | 0.021 |  1.36 |
+| Q2 | 9 | 6667.128 | 22417 | 0.153 | 2.88 | 
+| median | 14 | 7460.84 | 33103 | 0.227 | 3.25 |
+| Q4 | 14 | 8325.618 | 46418 | 0.349 |  3.61 |
+| maximum | 14 | 16872.05 | 250000 | 4.852 |  7.2 | 
 
 *Table 2: Numeric Data Summary Satistics - rounded for readability*
 
-Tables 2.1 and 2.2 act as a good baseline, but sometimes it can be easier to understand relationships with graphs. Below is a correlation matrix that depicts the strength of correlations between features. 
-
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:55%; height:450px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/correlation_matrix.png" alt="Correlation Matrix" style="width:70%; height:450px;">
     <figcaption style="font-style: italic;">Figure 1: Correlation Matrix for Numeric Features</figcaption>
 </figure>
 
-It can be noted from the matrix that there is a strong, almost perfect correlation between several variables. This is expected because many variables such as `UL96_affordability_ratio`, `LL95_affordability_ratio`, `se_food_afford`, `rse_food_afford`, `CA_RR_Affordability` and `affordability_per_person`are all calculated from information taken from `affordability_ratio`. Some more interesting strong correlations to take note of are between `cost_yr` and `ave_fam_size`, `med_income` and `food_afford_decile`. This is helpful because we can expect `food_afford_decile` to be an important feature in the model building process.
+It can be noted from Figure 1 that there is a strong, almost perfect correlation between several variables, namely `cost_yr` and `ave_fam_size`. 
 
 While not overwhelmingly apparent in the correlation matrix, there is also an important relationship between `median_income` and `ave_fam_size` that Figure 2 below illustrates.
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/code/income_fam_size_plot.png" alt="Description" style="width:55%; height:450px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/income_fam_size_plot.png" alt="Description" style="width:70%; height:400px;">
     <figcaption style="font-style: italic;">Figure 2: Scatterplot of Income Against Family Size</figcaption>
 </figure>
 
-Figure 2 reveals a particularly interesting trend: while the spread of the points seems to suggest that most women-headed households earn enough to afford food for their families, the red line superimposed on the graph highlights the unfortunate reality. The median annual income in this dataset is $33,103.00. This is significantly below the median annual household income in the United States which stood at [$80,610.00 as of 2022](https://www.census.gov/library/publications/2024/demo/p60-282.html). 
+Figure 2 reveals a particularly interesting trend: while the spread of the points seems to suggest that most women-headed households earn enough to afford food for their families, the red line superimposed on the graph highlights the unfortunate reality. The median annual income in this dataset is $33,103.00. This is significantly below the median annual household income in the United States which stood at [$80,610.00 as of 2022](https://www.census.gov/library/publications/2024/demo/p60-282.html).
+
 
 Although a majority of the data in this report is numeric, there are some categorical features that can still be examined. Table 3 below includes some summary statistics on these features. 
 
@@ -96,26 +91,38 @@ Although a majority of the data in this report is numeric, there are some catego
 
 *Table 3: Categorical Data Summary Satistics*
 
+By combining the numeric and categorical features together for EDA some key relationships not captured by the correlaiton matrix become apparent in the graphs below. 
+
+<div style="display: flex; justify-content: space-around; text-align: center;">
+    <figure>
+        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/ethnic_afford.png" alt="Image 1" width="600"/>
+        <figcaption  style="font-style: italic;">Figure 3: Affordability by Ethnic Group</figcaption>
+    </figure>
+    <figure>
+        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/mean_med_income_plot.png" alt="Image 2" width="600"/>
+        <figcaption  style="font-style: italic;">Figure 4: Income by Ethnic Group</figcaption>
+    </figure>
+</div>
+
+It appears that there is almost a perfect inverse relationship between affordability and income when accounting for ethnic group. 
 
 ## EDA Key Findings 
 
 The Exploratory Data Analysis presented in this section was useful to begin understanding basic structures, patterns, and relationships within this dataset. The following is a brief summary of the most important EDA insights:
 
-- Many variables are calculated from the `affordability_ratio` feature - leading to high correlations
+- There is a strong positive correlation between `cost_yr` and `ave_fam_size` which makes sense, larger families tend to require a greater amount spent on groceries.
 
-- There is a strong positive correlation between `med_income` and `food_afford_decile` which may be relevant in the feature selection process.
+- This data contains a wide range of annual income ($2,500 - $250,000), but is highly skewed.
 
-- This data contains a wide range of annual income ($2,500 - $250,000)
+- There appears to be an inverse relationship between `affordability_ratio` and `median_income` when grouping by ethnic group. 
 
-- The `med_income` feature is highly skewed, indicating a log transformation may be necessary.
-
-These key findings from the EDA uphold that there is a complex relationship between income, family size, and food afforability among women-headed households in California. Moving forward, these insights will act as a foundation for finding a predictive model that best estimates median income based on economic and demographic factors. 
+These key findings from the EDA uphold that there is a complex relationship between income, family size, and food affordability among women-headed households in California. Moving forward, these insights will act as a foundation for finding a predictive model that best estimates affordability ratios based on economic and demographic factors. 
 
 # Methods
 
 ## Feature Engineering
 
-Effective feature engineering for this dataset includes transforming the raw data obtained into meaningful, usable representations that can be fed into a model for accurate predictions. This section will identify the steps taken to engineer features effectively - specifically the process of enhancing relationships between income, household demographics, and food affordability. 
+Effective feature engineering for this dataset includes transforming the raw data obtained into meaningful, usable representations that can be fed into a model for accurate predictions. This section will identify the steps taken to engineer features effectively - specifically the process of enhancing relationships and providing more location information. 
 
 **1. Add Latitude and Longitude**
 
@@ -125,24 +132,17 @@ The original dataset used for this report did not include coordinate information
 
 The Food Cost Index is a measurement from the Consumer Price Index (CPI) used to understand the yearly costs of food in the United States. To assess where the women in this dataset stand in regards to the national average, the `food_cost_index` variable was calculated by dividing `cost_yr` by the national average cost of food. This value was calculated by averaging the median cost of food for high, medium, and low income households. ([national average source](https://www.ers.usda.gov/data-products/ag-and-food-statistics-charting-the-essentials/food-prices-and-spending/))
 
-**3. Affordability Status**
 
-Understanding if food is affordable is a useful binary indicator that is implemented by calculating if the `affordability_ratio` is above 1 (easily affordable). 
-
-**4. Affordability per Person**
-
-`affordability_per_person`  represents the affordability ratio adjusted for family size, providing a per-person perspective on economic affordability.
-
-|          | `latitude` | `longitude` | `affordability_per_person` | `food_cost_index` 
-|-----------|---------|-----------|----------|-------------|
-| count | 291717 | 291717 | 101733 | 264366 |
-| mean | 35.218 | -116.352 | .097 | 72.955 | 
-| standard deviation | 2.655 | 8.745 | .124 | 13.771 | 
-| minimum | 26.13 | -123.73 | .009 | 29.704 |
-| Q2 | 33.97 | -119.67 | .05 | 63.978 | 
-| median | 34.06 | -118.26 | .069 | 71.594 |
-| Q4 | 36.75 | -117.32 | .101 | 79.893 |
-| maximum | 48.92 | -71.35 | .996 | 161.904 |
+|          | `latitude` | `longitude` | `food_cost_index` |
+|----------|------------|------------|-------------------|
+| count | 291717 | 291717 | 264366 |
+| mean | 35.218 | -116.352 | 72.955  |
+| standard deviation | 2.655 | 8.745 | 13.771 |
+| minimum | 26.13 | -123.73 | 29.704 | 
+| Q2 | 33.97 | -119.67 | 63.978 |
+| median | 34.06 | -118.26 | 71.594 | 
+| Q4 | 36.75 | -117.32 | 79.893 |
+| maximum | 48.92 | -71.35 | 161.904 |
 
 *Table 4: Additional Numeric Data Summary Statistics*
 
@@ -154,27 +154,26 @@ All categorical features must be encoded into numeric formats that the computer 
 
 **5. Handling Numeric Features**
 
-Similarly to the categorical features, numeric features also need some preprocessing before getting passed into relevant models. Since this analysis deals with features that are likely very skewed, the predictors need to be scaled using the `StandardScaler` package also from `sklearn`. The target `med_income` is also understood to be skewed, so taking the log of both the train and test target samples is a useful step to take for improved model interpretability. 
+Similarly to the categorical features, numeric features also need some preprocessing before getting passed into relevant models. Since this analysis deals with features that are likely very skewed, the predictors need to be scaled using the `StandardScaler` package also from `sklearn`. 
 
 **6. Handling Missing Values**
 
 Referring back to Tables 2.1, 2.2, and 3, there are a handful of missing values that need to be handled before running any models. Using Scikit-Learn's `SimpleImputer` package, the missing numeric values can be filled with the average value of the given feature, and the most frequent value can be filled in categorical features. 
-
 
 ## Supervised Learning Models
 
 Several supervised learning models were tested on this data to test the relationships between features and the target variable. Each model was assessed based on the performance metric root mean squared error (rMSE), computational time, and challenges that occurred with the process. The table below includes the summary on these models and metrics. 
 
 
-| Model Name                     | Description                  | Hyperparameters | Root Mean Squared Error (rMSE) | Time | Challenges |
+| Model Name  | Description | Hyperparameters | rMSE | Time | Challenges |
 |-----------|---------------------|---------|-------------------|----------------|---------|
-| K Nearest Neighbors Regressor |  Predicting target by finding the average of the *k* number of neighbors surrounding a data point. | `n_neighbors`: 5  `weights`: 'uniform' |  0.0227 | 80m11s  | High computational cost |
-| Ridge Regression | A linear regression model that uses Ridge regularization - a penalty term added to the cost function that pushes all coefficients towards zero. | `model__alpha`: 0.01 |  0.0647 | 3m7.3s   | Poor rMSE score compared to other models | 
-| Decision Trees | Starting from the root node, branches move down with nodes split based on different patterns in the most important features until we reach the terminal node (leaves). | `model_max_depth`: 7 `model_min_samples_leaf`: 1 `model_min_samples_split`: 10 | 0.02495 |   2m32s   | Prone to overfitting | 
-| XGBoost | Combines weak learning trees into strong learners by combining residuals and pruning. |    `learning_rate`: 0.2 `max_depth`: 7 `n_estimators`: 100 `subsample`: 1.0 |   0.0063     |  8m25s    | Training time slightly high | 
-| Deep Neural Network | Using Tensorflow, a DNN is an artificial neural network that includes multiple layers that can look for different patterns in the data.       |  `epochs`: 20 `batch_size`: 32 `validation_split`: 0.2   |  0.0385     | 8m34s    | Low complexity in an effort to remain computationally cost effective | 
+| K Nearest Neighbors Regressor |  Predicting target by finding the average of the *k* number of neighbors surrounding a data point. | `n_neighbors`: 5  `weights`: 'distance' | 0.0321   | 12m  | Computationally expensive |
+| Ridge Regression | A linear regression model that uses Ridge regularization - a penalty term added to the cost function that pushes all coefficients towards zero. | `alpha`: 10 |  0.2015 | 26.1s   | Poor rMSE score compared to other models | 
+| Decision Trees | Starting from the root node, branches move down with nodes split based on different patterns in the most important features until we reach the terminal node (leaves). | `max_depth`: 7 `min_samples_leaf`: 1 `min_samples_split`: 10 | 0.0158 |   2m32s   | Prone to overfitting | 
+| XGBoost | Combines weak learning trees into strong learners by combining residuals and pruning. |    `learning_rate`: 0.2 `max_depth`: 7 `n_estimators`: 100 `subsample`: 1.0 |   0.0153     |  2m20s    | Best available model   | 
+| Deep Neural Network | Using Tensorflow, a DNN is an artificial neural network that includes multiple layers that can look for different patterns in the data.       |  `epochs`: 20 `batch_size`: 32 `validation_split`: 0.2   |  0.0628     | 1m57s    | Not a very strong model for this data | 
 
-*Table 5: Supervised Models*
+*Table 5: Supervised Learning Models*
 
 # Discussion on Model Selection
 
@@ -190,7 +189,7 @@ While both the Decision Trees and XGBoost performed well, XGBoost's built-in reg
 
 **3. Computational Costs**
 
-K Nearest Neighbors (KNN) yieled a high computational cost because it relies heavily on time-consuming distance calculations for each prediction. XGBoost was slow, but offered a good trade-off between runtime and predictive power. 
+K Nearest Neighbors (KNN) yieled a high computational cost because it relies heavily on time-consuming distance calculations for each prediction. XGBoost was not the fastest model, but offered a good trade-off between runtime and predictive power. 
 
 # Detailed Discussion on Best Model
 
@@ -208,29 +207,7 @@ To build the most optimized version of the XGBoost Regressor, hyperparameter tun
 
 - `subsample`: Fraction of observations randomly sampled for each tree
 
-With these hyperparameter options, `GridSearchCV` tested all combinations and evaluated them using 5-fold cross validation, which splits the data into 4 training subsets and one validation. 
-
-```
-param_grid = {
-    'n_estimators': [50, 100],
-    'learning_rate': [0.01, 0.1, 0.2],
-    'max_depth': [3, 5, 7],
-    'subsample': [0.8, 1.0],
-}
-gb_grid_search = GridSearchCV(
-    XGBRegressor(random_state=42),
-    param_grid=param_grid,
-    scoring='neg_mean_squared_error',
-    cv=5,
-    verbose = 1
-)
-gb_grid_search.fit(X_train_processed, y_train_log)
-
-gb_grid_search.best_params_   #return the best parameters
-
-```
-
-This tuning process was effective in ensuring that the model was fit properly, and contained hyperparameters that control the model's over/under-fitting tendencies. 
+With these hyperparameter options, `GridSearchCV` tested all combinations and evaluated them using 5-fold cross validation, which splits the data into 4 training subsets and one validation. This tuning process was effective in ensuring that the model was fit properly, and contained hyperparameters that control the model's over/under-fitting tendencies. 
 
 ## SHAP for Feature Importance
 
@@ -242,32 +219,33 @@ One thing SHAP can be used for is to see how predicted values compare to actual 
 
 1. True Positives/Negatives (TP/TN):
 
-A predicted log income value of 10.5464 compared to the actual value of 10.54639 has an error of -0.00006 which is insignificant at the chosen 0.00001 level, thus suggesting that the model is accurate in this instance. 
+    A predicted affordability ratio of 0.3246 for an individual compared to the actual ratio of 0.3247 has an error of essentially zero (1.034459e-04) which is insignificant at the chosen 0.01 level, thus suggesting that the model is accurate in this instance. 
 
 2. False Positives/Negatives (FP/FN):
 
-A predicted log income value of 10.914 compared to the actual value of 10.9404 has an error of 0.026469 which is significant at the chosen 0.00001 level. Since the model incorrectly classified this observation higher than the actual income, this is a False Positive overprediction. An opposite instance with negative error would represent a false negative underprediction. 
+    A predicted affordability ratio of 1.3403 compared to the actual value of 1.4491 has an error of ~0.11 which is significant at the chosen 0.01 level. Since the model incorrectly classified this individual higher than their actual affordability ratio, this is a **False Positive** overprediction. An opposite instance with negative error would represent a **False Negative** underprediction. 
 
 **II. Feature Contributions**
 
-To continue interpreting the XGBoost model predictions, SHAP can be used to quanitfy and visualize feature contributions. This can be done on a global scale, identifying the most influential features across the dataset, and locally to visualize individual predictions. 
+To continue interpreting the XGBoost model predictions, SHAP can be used to quanitfy and visualize feature contributions. This can be done on a global scale by identifying the most influential features across the dataset, and locally to visualize individual predictions. 
 
 A SHAP summary plot helps to identify features by ranking them based on their average absolute SHAP values. 
 
 <div style="display: flex; justify-content: space-around; text-align: center;">
     <figure>
-        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/SHAP_summary.png" alt="Image 1" width="500"/>
-        <figcaption  style="font-style: italic;">Figure 3: SHAP Global Feature Contributions</figcaption>
+        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/SHAP_summary.png" alt="Image 1" width="800"/>
+        <figcaption  style="font-style: italic;">Figure 4: SHAP Global Feature Contributions</figcaption>
     </figure>
     <figure>
-        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/single_SHAP.png" alt="Image 2" width="500"/>
-        <figcaption  style="font-style: italic;">Figure 4: SHAP Local Feature Contributions</figcaption>
+        <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/single_SHAP.png" alt="Image 2" width="800" height = "250"/>
+        <figcaption  style="font-style: italic;">Figure 5: SHAP Local Feature Contributions</figcaption>
     </figure>
 </div>
 
-The feature `affordability_per_person` is a substantially influential variable in the model as it reduces `median_income` when `affordability_per_person` is high. This suggests that higher food affordability is associated with lower income predictions. This counterintuitive relationship may seem incorrect or opposite of what we would expect, however figure 2 serves as a reminder that there is likely an external factors influencing affordability versus income. One possible explanation could be that those with lower incomes and larger families tend to shop for cheaper food options. 
+As seen in Figure 5, the feature `median_income` is a substantially influential variable in the model. When `median_income` is high, overall predictions for `affordability_ratio` decrease slightly, and when `median_income` is low, `affordability_ratio` increases substantially. Similar relationships can be interpreted for the other features on the SHAP global feature contributions plot. 
 
-To see the feature impacts on a specific prediction, the waterfall plot in figure 4 shows that `affordability_per_person` contributes -1.09 to  `median_income`, pushing the prediction lower than the baseline expected prediction of 10.47. `affordability_ratio` contributes -1.496, also pulling the prediction lower. Note that I had to take the log of price so in regular terms it is $35544.79 
+
+To see the feature impacts on a specific prediction, the waterfall plot in Figure 5 shows that `median_income` contributes +0.66 to  `affordability_ratio`, pushing the prediction higher than the baseline expected prediction of 0.325. `geoname_San Joaquin Valley` contributes +0.1, also pulling the prediction for affordability up. These features in combination with the others captured in Figure 5 contribute to pushing the final prediction for this particular individual to a predicted affordability ratio of 0.964.
 
 SHAP is a powerful tool used to interpret the XGBoost predictions by qunatifying the contributions of each feature to the model's output. Key global features that are particularly influential were identified by SHAP's global analysis, and local analyses from the waterfall plot provide insight into individual predictions. These interpretations allow models to be applied to real-world implications by ensuring that the predictions are easily explainable. 
 
@@ -275,27 +253,27 @@ SHAP is a powerful tool used to interpret the XGBoost predictions by qunatifying
 
 The next step in understanding the data and chosen model is to find observations or patterns that deviate significantly from the norm. This may include underpredictions, overpredictions, or unexpected feature combinations. 
 
-**I. Anomaly Detection on Income**
+**I. Anomaly Detection on Affordability**
 
-To detect income anomalies, the dataset can be clustered into 3 groups based on log-transformed values of income. This clustering techniques helps with uncovering general patterns in the distribution of income, while outlining extreme cases to be aware of.
-
-<figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/first_anomaly.png" alt="Description" style="width:55%; height:400px;">
-    <figcaption style="font-style: italic;">Figure 5</figcaption>
-</figure>
-
-In Figure 5, anomalies are highlighted in red. These were calculated by selecting the top 15 of income amounts farthest from their respective cluster centroids. Such large distances indicate these individuals likely have unusually high incomes, which sets them apart from the larger income distribution. 
-
-**II. Anomaly Detection on Income, Family Size, and Ethnic Group**
-
-Anomaly detection can also be expanded to tracking multiple features. In this case, looking at family size and ethnicity can uncover important income subgroups. 
+To detect affordability anomalies, the dataset can be clustered into 3 groups based on affordability. This clustering techniques helps with uncovering general patterns in the distribution of the target, while outlining extreme cases to be aware of.
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/anomaly_2.png" alt="Description" style="width:55%; height:400px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/first_anomaly.png" alt="Description" style="width:70%; height:350px;">
     <figcaption style="font-style: italic;">Figure 6</figcaption>
 </figure>
 
-In Figure 6, the cluster groupings are within close proximity of each other, but there is a clear visual difference from one ethnic group to the next. The anomalies in this figure are any individuals that appear far from their cluster centroids. examples of these could be high or low earners clustered in a prodominently low or high income group. 
+In Figure 6, anomalies are highlighted in red. These were calculated by selecting the top 1% of affordability ratios farthest from their respective cluster centroids. Such large distances indicate these individuals likely have unusually high ratios given the surrounding averages.
+
+**II. Anomaly Detection on Affordability, Family Size, and Ethnic Group**
+
+Anomaly detection can also be expanded to tracking multiple features. In this case, looking at family size and ethnicity can uncover important affordability subgroups. 
+
+<figure style="text-align: center;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/anomaly_2.png" alt="Description" style="width:70%; height:350px;">
+    <figcaption style="font-style: italic;">Figure 6</figcaption>
+</figure>
+
+In Figure 6, the cluster groupings are within close proximity of each other, but there is a clear visual difference from one ethnic group to the next. The anomalies in this figure are any individuals that appear far from their cluster centroids. examples of these could be high or low earners clustered in a prodominently low or high affordability or family size group. 
 
 There are many iterations of this type of subgroup clustering that would provide valuable insights regarding various factors. Providing this type of analysis can be used to inform certain political interventions to help subgroups that would benefit from government action. 
 
@@ -308,41 +286,35 @@ The topic used to understand this dataset is dimension reduction. This step is i
 The first step is to fit `PCA` to the training predictors. SInce the goal is to find a linear transformation of the original data that mximizes the variance of the data, the graph below helps to visualize what this process looks like for our case. 
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/pca_variance.png" alt="Description" style="width:55%; height:400px;">
-    <figcaption style="font-style: italic;">Figure 7: PCA Maximize Variance Plot</figcaption>
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/pca_variance.png" alt="Description" style="width:70%; height:350px;">
+    <figcaption style="font-style: italic;">Figure 8: PCA Maximize Variance Plot</figcaption>
 </figure>
 
-From this, we know that to retain 95% of the variance, we need 86 components. The next step is to find the hyperplane that preserves the largest amount of the variance, and project the data onto that hyperplane. 
+From this, we know that to retain 95% of the variance, we need 138 components. The next step is to find the hyperplane that preserves the largest amount of the variance, and project the data onto that hyperplane. 
 
-```
-pca = PCA(n_components=2) # on train to avoid data leakage
-## pca analyzes structure of training data and finds principle components (linear combinations of original features that maximize variance)
-X_train_pc = pca.fit_transform(X_train_processed.toarray()) # project training data into lower-dimension
-X_test_pc = pca.transform(X_test_processed) 
-```
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/pca_plot.png" alt="Description" style="width:55%; height:400px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/pca_plot.png" alt="Description" style="width:70%; height:350px;">
     <figcaption style="font-style: italic;">Figure 8: PCA Labels</figcaption>
 </figure>
 
 
-The new `X_train_pc` and `X_test_pc` could be used in the XGBoost model for improved performance. Fitting the optimized model to these new training and testing sets yieled a rMSE of 0.0202 which is lower than the original model's result (0.0063). This could be due to the fact that the dimenion reduction values are not complex enough to explain the behavior in the data well. 
+The new `X_train_pc` and `X_test_pc` could be used in the XGBoost model for improved performance. Fitting the optimized model to these new training and testing sets yieled a rMSE of 0.0202 which is higher than the original model's result (0.0153). This could be due to the fact that the dimenion reduction values are not complex enough to explain the behavior in the data well.
 
 **II. UMAP**
 
 UMAP is an example of a manifold learning method to see how a non-linear dimension reduction algorithm would perform on this data. There are multiple manifold learning options, but UMAP is generally faster than tSNE, another popular choice, and balances global versus local relationships better than tSNE as well. 
 
 <figure style="text-align: center;">
-    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/umap_plot.png" alt="Description" style="width:55%; height:400px;">
+    <img src="/Users/madisonwozniak/Desktop/STAT486/final_project/plots/umap_plot.png" alt="Description" style="width:70%; height:350px;">
     <figcaption style="font-style: italic;">Figure 9: UMAP Labels</figcaption>
 </figure>
 
-Since UMAP is being used for visualization purposes in this report, a 2D representation of the dat is not extremely informative or useful. Due to this, PCA is likely a better visual aid for this data as patterns are decipherable. 
+Since UMAP is being used for visualization purposes in this report, a 2D representation of the dat is not extremely informative or useful. Additionally, UMAP took significantly longer than PCA which adds to the disadvantage of using it as the key dimension reduction technique for this analysis.
 
 # Conclusion and Next Steps
 
-This report used machine learning techniques to analyze and predict the nature of income among women-headed households in California based on affordability and demographic information. After contrasting multiple different kinds of models, XGBoost proved to be the most effective as it captured the complexity of the data and provided reliable predictions for income. An analysis of feature importance with SHAP reinforced the strong impact of affordability and family size on income, as well as certain locations in California. Anomaly detection helped highlight outliers and unique cases of individuals who are higher earners than the majority of the women sampled. 
+This report used machine learning techniques to analyze and predict the nature of affordality ratios among women-headed households in California based on income and additional demographic information. After contrasting multiple different kinds of models, XGBoost proved to be the most effective as it captured the complexity of the data and provided reliable predictions. An analysis of feature importance with SHAP reinforced the strong impact of income and geographic location on affordability. Anomaly detection helped highlight outliers and unique cases of individuals who are likely higher earners or spend less on food than the majority of the women sampled. 
 
-In the future, there could be stronger ingetration of geographic information that could be used for a more thorough spatial analysis of income. It may also be useful to test additional ensemble approaches, and refine the anomaly detection process to find more interesting patterns and subgroup interactions. 
+In the future, there could be stronger integration of geographic information that could be used for a more thorough spatial analysis of affordability considering it was such an influential predictor. It may also be useful to test additional ensemble approaches, and refine the anomaly detection process to find more interesting patterns and subgroup interactions. 
 
-
+include some suggestions
