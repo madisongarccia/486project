@@ -4,19 +4,19 @@ Author: Madison Wozniak
 
 ## Project Description
 
-This project explores income inequality among women-headed households in California using data-driven insights from machine learning models. The primary goal is to predict median income using features related to food affordability, family demographics, and regional data. Additionally, the project includes anomaly detection to identify unique cases and SHAP analysis for feature interpretability.
+This project explores fod affordability inequalities among women-headed households in California using data-driven insights from machine learning models. The primary goal is to predict affordability ratios using features related to annual income, family demographics, and regional data. Additionally, the project includes anomaly detection to identify unique cases and SHAP analysis for feature interpretability.
 
 **Key objectives:**
 
-- Understand the relationship between income, affordability, and demographics.
+- Understand the relationship between affordability, income, and demographics.
 
-- Build and evaluate machine learning models to predict median income.
+- Build and evaluate machine learning models to predict affordability.
 
 - Interpret model results using SHAP values to identify key features.
 
 - Detect anomalies in the data to highlight outliers and unique subgroups.
 
-- The final report, along with the supporting code is included in this repo and provides insights into income disparities and offers actionable recommendations for future work and policy interventions.
+- The final report, along with the supporting code is included in this repo and provides insights into affordabiility disparities and offers actionable recommendations for future work and policy interventions.
 
 ## Overview of Results
 
@@ -29,12 +29,13 @@ This project explores income inequality among women-headed households in Califor
 
 2. Feature Interpretability with SHAP:
 
-    Key features influencing income include affordability_per_person and affordability_ratio.
+    Key features influencing affordability include median_income and different geographic locations.
+
     SHAP visualizations provided insights into individual predictions and global feature importance.
 
 3. Anomaly Detection:
 
-    Identified income outliers and subgroups with unique income patterns, offering actionable insights into economic disparities.
+    Identified income outliers and subgroups with unique affordability patterns, offering actionable insights into economic disparities.
 
 4. Dimension Reduction:
 
