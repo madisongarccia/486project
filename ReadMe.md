@@ -47,6 +47,7 @@ This project explores fod affordability inequalities among women-headed househol
         │   ├── EDA.ipynb                # Code for exploratory data analysis
         │   ├── working_income.ipynb     # feature engineering, model selection
         │   ├── selected_model.ipynb     # XGBoost, SHAP, Cluster analysis, dimension reduction 
+        |   |── final_data.csv           # data without any identifying features
         ├── plots/                       # Saved visualizations (e.g., SHAP, PCA, UMAP)
         ├── reports/                     # Reports from entire project process
         |   |── final_report.md          # Full report in Markdown format
@@ -56,6 +57,6 @@ This project explores fod affordability inequalities among women-headed househol
         └── README.md                    # Project overview (this file)
 
 
-Dataset not included for privacy purposes but can be found here: 
+The original dataset not included for privacy purposes but can be found here: 
 
 Link to data source: https://catalog.data.gov/dataset/food-affordability-fc448
